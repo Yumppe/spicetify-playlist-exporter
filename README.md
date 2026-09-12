@@ -99,6 +99,14 @@ Playlist Exporter does not include telemetry or remote logging.
 
 Your extension settings, playlist profiles, presets and folder permissions are stored locally on your device.
 
+## Contributing
+
+Bug reports and feature suggestions are very welcome through GitHub Issues.
+
+At the moment, I'm not actively accepting pull requests, mainly so I can keep the project manageable and avoid changes I don't have enough time to review properly.
+
+If you have an improvement in mind, feel free to open a feature request and describe your idea there.
+
 ## Feedback and support
 
 Found a problem or have an idea?
