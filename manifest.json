@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Playlist Exporter",
+    "description": "Export Spotify playlists to customizable CSV files with per-playlist settings, scheduling, and optional album cover downloads.",
+    "preview": "preview.png",
+    "main": "playlist-exporter.js",
+    "readme": "README.md",
+    "authors": [
+      {
+        "name": "Yumppe",
+        "url": "https://github.com/Yumppe"
+      }
+    ],
+    "tags": [
+      "playlist",
+      "export",
+      "csv",
+      "backup"
+    ]
+  }
+]
