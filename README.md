@@ -2,17 +2,19 @@
 
 A Spicetify extension for exporting Spotify playlists to customizable CSV files.
 
+![Playlist Exporter](preview.png)
+
 ## Features
 
 - Export playlists to CSV
-- Choose which metadata columns to include
-- Configure settings individually for each playlist
-- Sort and remove duplicates
+- Choose exactly which metadata columns to include
+- Configure export settings individually for each playlist
+- Sort tracks and remove duplicates
 - Export through browser downloads or directly to a selected folder
-- Optional album cover downloads
-- Automatic scheduled exports
-- Reusable export presets
-- Persistent export history and settings
+- Optionally download album covers
+- Schedule automatic exports
+- Create reusable export presets
+- Keep persistent export history and settings
 
 ## Installation
 
@@ -36,11 +38,66 @@ spicetify config extensions playlist-exporter.js
 spicetify apply
 ```
 
+## Opening Playlist Exporter
+
+After installation, look for the **download-shaped Playlist Exporter button** in Spotify's top bar.
+
+Depending on your Spotify layout or Spicetify theme, the button may appear on the **left or right side of the top bar**.
+
+Click the button to open Playlist Exporter.
+
+You can also open it through:
+
+**Profile picture → Playlist Exporter settings → Open exporter**
+
 ## Usage
 
-Open **Playlist Exporter** from the button in Spotify's top bar or from the Spicetify menu.
+1. Open Playlist Exporter.
+2. Select one or more playlists from the list on the left.
+3. Click a playlist to configure its individual export profile.
+4. Choose the columns, sorting, duplicate handling, filename and destination you want.
+5. Optionally enable automatic exports and choose an interval.
+6. Click **Export now**.
 
-Select a playlist, configure the export options you want, and choose **Export now**.
+Each playlist can keep its own configuration, so different playlists can use different columns, destinations, schedules and presets.
+
+## Settings
+
+There are two ways to open Playlist Exporter settings:
+
+- Click **Settings** in the top-right of the Playlist Exporter interface.
+- Open your **Spotify profile picture → Playlist Exporter settings**.
+
+From the Settings page you can:
+
+- View extension information
+- Check saved profile and preset information
+- See automatic export status
+- Access support and feedback links
+- Return directly to the main Playlist Exporter interface
+
+## Automatic exports
+
+Automatic exports can be enabled independently for each playlist.
+
+Playlist Exporter periodically checks enabled playlists and exports them according to their configured interval.
+
+Spotify must be running with the extension loaded for scheduled exports to run.
+
+## Export destinations
+
+Playlist Exporter supports:
+
+- **Standard Downloads** — exports through your browser/Spotify download behavior
+- **Custom folders** — when supported by your Spotify/Chromium build, you can give Playlist Exporter permission to write directly to a selected folder
+
+Folder permissions are handled locally by the browser environment.
+
+## Privacy
+
+Playlist Exporter does not include telemetry or remote logging.
+
+Your extension settings, playlist profiles, presets and folder permissions are stored locally on your device.
 
 ## Feedback and support
 
