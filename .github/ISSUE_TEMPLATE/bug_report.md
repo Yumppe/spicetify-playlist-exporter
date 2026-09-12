@@ -2,8 +2,9 @@
 name: Bug report
 about: Report a problem with Playlist Exporter
 title: "[Bug]"
-labels: ''
+labels: bug
 assignees: ''
+type: Bug
 
 ---
 
