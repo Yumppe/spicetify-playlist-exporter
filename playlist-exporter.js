@@ -22,7 +22,7 @@
     if (window.__playlistExporterV4ExtensionLoaded) return;
     window.__playlistExporterV4ExtensionLoaded = true;
 
-// Playlist Exporter 4.2.2 — Extension build
+// Playlist Exporter 4.2.6 — Extension build
 // Spicetify extension: per-playlist CSV profiles, scheduling, presets, persistent summaries, album art export.
 
 const React = Spicetify.React;
@@ -153,11 +153,22 @@ const APP_CSS = `
   --pe-border-strong: rgba(255,255,255,.18);
   max-width: 1480px;
   margin: 0 auto;
-  padding: 28px 30px 64px;
+  padding: 76px 30px 64px;
   color: var(--pe-text);
   box-sizing: border-box;
 }
 .pe4-app * { box-sizing: border-box; }
+
+.pe4-app,
+.pe4-app button,
+.pe4-app a,
+.pe4-app input,
+.pe4-app select,
+.pe4-app textarea,
+.pe4-app label,
+.pe4-app [role="button"] {
+  -webkit-app-region: no-drag !important;
+}
 .pe4-header { display:flex; justify-content:space-between; align-items:flex-start; gap:24px; margin-bottom:22px; }
 .pe4-title-wrap { display:flex; gap:14px; align-items:center; min-width:0; }
 .pe4-logo { width:44px; height:44px; border-radius:12px; display:grid; place-items:center; background:var(--pe-accent); color:#000; flex:0 0 auto; }
@@ -273,9 +284,20 @@ const APP_CSS = `
 .pe4-preset-save { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; margin-top:8px; }
 .pe4-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:15px; padding-top:14px; border-top:1px solid var(--pe-border); }
 .pe4-actions .pe4-button-primary { flex:1 1 180px; }
+.pe4-header-actions { display:flex; align-items:center; gap:9px; flex-wrap:wrap; justify-content:flex-end; }
+.pe4-settings-wrap { max-width:980px; margin:0 auto; }
+.pe4-settings-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.pe4-settings-card { border:1px solid var(--pe-border); background:var(--pe-panel); border-radius:14px; padding:18px; }
+.pe4-settings-card h2 { margin:0 0 6px; font-size:15px; }
+.pe4-settings-card p { margin:0; color:var(--pe-muted); font-size:12px; line-height:1.55; }
+.pe4-settings-row { display:flex; justify-content:space-between; gap:18px; padding:11px 0; border-bottom:1px solid var(--pe-border); font-size:12px; }
+.pe4-settings-row:last-child { border-bottom:0; padding-bottom:0; }
+.pe4-settings-row strong { font-weight:720; }
+.pe4-settings-value { color:var(--pe-muted); text-align:right; }
+.pe4-settings-wide { grid-column:1 / -1; }
 @media (max-width:1100px) { .pe4-layout{grid-template-columns:320px minmax(0,1fr)} .pe4-available-columns{grid-template-columns:1fr} }
 @media (max-width:850px) { .pe4-stats{grid-template-columns:repeat(2,minmax(0,1fr))} .pe4-layout{grid-template-columns:1fr} .pe4-list{max-height:380px} }
-@media (max-width:600px) { .pe4-app{padding:22px 16px 48px} .pe4-header{flex-direction:column} .pe4-grid-2,.pe4-grid-3,.pe4-available-columns{grid-template-columns:1fr} }
+@media (max-width:600px) { .pe4-app{padding:76px 16px 48px} .pe4-header{flex-direction:column} .pe4-grid-2,.pe4-grid-3,.pe4-available-columns{grid-template-columns:1fr} }
 `;
 
 const ICONS = {
@@ -287,7 +309,8 @@ const ICONS = {
   clock: '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
   close: '<path d="m7 7 10 10M17 7 7 17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
   edit: '<path d="M4 20h4l11-11-4-4L4 16v4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m13.5 6.5 4 4" fill="none" stroke="currentColor" stroke-width="1.8"/>',
-  image: '<rect x="3.5" y="5" width="17" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.5" fill="currentColor"/><path d="m5.5 17 4-4L12 15.5l2.8-2.8L19 16.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'
+  image: '<rect x="3.5" y="5" width="17" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.5" fill="currentColor"/><path d="m5.5 17 4-4L12 15.5l2.8-2.8L19 16.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+  settings: '<circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.97 19.36a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3v-4h.08A1.7 1.7 0 0 0 4.64 8.94a1.7 1.7 0 0 0-.34-1.88L4.24 7l2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.57 1.7 1.7 0 0 0 10.03 3H10V3h4v.08A1.7 1.7 0 0 0 15.03 4.64a1.7 1.7 0 0 0 1.88-.34l.06-.06L19.8 7.07l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.03H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>'
 };
 
 function Icon({ name, size = 18 }) {
@@ -1137,8 +1160,11 @@ function PlaylistExporterApp() {
     h("style",{dangerouslySetInnerHTML:{__html:APP_CSS}}),
     h("main",{className:"pe4-app"},
       h("header",{className:"pe4-header"},
-        h("div",{className:"pe4-title-wrap"},h("div",{className:"pe4-logo"},h(Icon,{name:"download",size:22})),h("div",null,h("h1",{className:"pe4-title"},"Playlist Exporter v4.2.2"),h("p",{className:"pe4-subtitle"},"Independent export profiles, schedules, folders, CSV layouts and album art export for every playlist."))),
-        h(StatusPill,{status})
+        h("div",{className:"pe4-title-wrap"},h("div",{className:"pe4-logo"},h(Icon,{name:"download",size:22})),h("div",null,h("h1",{className:"pe4-title"},"Playlist Exporter v4.2.6"),h("p",{className:"pe4-subtitle"},"Independent export profiles, schedules, folders, CSV layouts and album art export for every playlist."))),
+        h("div",{className:"pe4-header-actions"},
+          h(StatusPill,{status}),
+          h("button",{type:"button",className:"pe4-button",onClick:()=>openPlaylistExporter("settings")},h(Icon,{name:"settings",size:15}),"Settings")
+        )
       ),
       h("div",{className:"pe4-stats"},h(StatCard,{label:"Library playlists",value:playlists.length}),h(StatCard,{label:"Selected now",value:selectedCount}),h(StatCard,{label:"Automatic exports",value:autoCount}),h(StatCard,{label:"Last export",value:formatDateTime(config.lastAnyExportTime)})),
       message?h("div",{className:"pe4-banner","data-kind":messageKind},message,status==="exporting"&&progress.total?h("div",{className:"pe4-progress"},h("div",{className:"pe4-progress-bar",style:{width:`${progressPercent}%`}})):null):status==="exporting"?h("div",{className:"pe4-banner"},progress.label,h("div",{className:"pe4-progress"},h("div",{className:"pe4-progress-bar",style:{width:`${progressPercent}%`}}))):null,
@@ -1229,21 +1255,64 @@ function PlaylistExporterApp() {
               h("div",{className:"pe4-note",style:{marginTop:"8px"}},"Duplicate detection never compares track names alone. The recording mode uses ISRC when Spotify provides it, then falls back to Spotify track ID, so different songs with the same title are kept.")
             ),
 
-
-            h("div",{className:"pe4-section"},
-              h("div",{className:"pe4-section-title-row"},h("h3",{className:"pe4-section-title"},"Support & feedback"),h("span",{className:"pe4-section-note"},"GitHub Issues")),
-              h("div",{className:"pe4-note"},"Found a bug or have an idea? Use GitHub Issues so reports and suggestions can be tracked publicly."),
-              h("div",{className:"pe4-actions",style:{marginTop:"10px",paddingTop:0,borderTop:0}},
-                h("a",{className:"pe4-button pe4-button-danger",href:BUG_REPORT_URL,target:"_blank",rel:"noopener noreferrer"},"Report a bug"),
-                h("a",{className:"pe4-button",href:FEATURE_REQUEST_URL,target:"_blank",rel:"noopener noreferrer"},"Suggest a feature"),
-                h("a",{className:"pe4-button",href:PROJECT_URL,target:"_blank",rel:"noopener noreferrer"},"View on GitHub")
-              )
-            ),
-
             h("div",{className:"pe4-section"},
               h("div",{className:"pe4-section-title-row"},h("h3",{className:"pe4-section-title"},"Export configuration preview"),h("span",{className:"pe4-section-note"},`${activeProfile.columns.length} columns · ${activeProfile.duplicateMode==="keep"?"duplicates kept":activeProfile.duplicateMode==="recording"?"recording duplicates removed":"exact duplicates removed"}`)),
               h("div",{className:"pe4-preview"},h("div",{className:"pe4-preview-file"},previewFilename),h("div",{className:"pe4-preview-scroll"},h("table",{className:"pe4-preview-table"},h("thead",null,h("tr",null,previewColumns.map((c)=>h("th",{key:c.id},c.label)))),h("tbody",null,h("tr",null,previewColumns.map((c)=>h("td",{key:c.id},c.value(sample)))))))),
               h("div",{className:"pe4-actions"},h("button",{type:"button",className:"pe4-button pe4-button-primary",onClick:()=>handleManualExport([activePlaylist.id]),disabled:busy},h(Icon,{name:"download",size:16}),`Export ${activePlaylist.name} now`),h("button",{type:"button",className:"pe4-button",onClick:()=>refreshLibrary(false),disabled:busy},h(Icon,{name:"refresh",size:15}),"Refresh library"))
+            )
+          )
+        )
+      )
+    )
+  );
+}
+
+
+function PlaylistExporterSettings() {
+  const config = loadConfig();
+  const autoCount = Object.values(config.playlistProfiles || {}).filter((profile)=>normalizeProfile(profile).autoEnabled).length;
+  const profileCount = Object.keys(config.playlistProfiles || {}).length;
+  const customPresetCount = (config.customPresets || []).length;
+  const folderPickerSupported = typeof window.showDirectoryPicker === "function";
+
+  return h(React.Fragment,null,
+    h("style",{dangerouslySetInnerHTML:{__html:APP_CSS}}),
+    h("main",{className:"pe4-app"},
+      h("header",{className:"pe4-header"},
+        h("div",{className:"pe4-title-wrap"},
+          h("div",{className:"pe4-logo"},h(Icon,{name:"settings",size:22})),
+          h("div",null,
+            h("h1",{className:"pe4-title"},"Playlist Exporter settings"),
+            h("p",{className:"pe4-subtitle"},"Global information, support and local extension data.")
+          )
+        ),
+        h("div",{className:"pe4-header-actions"},
+          h("button",{type:"button",className:"pe4-button pe4-button-primary",onClick:()=>openPlaylistExporter("exporter")},h(Icon,{name:"download",size:15}),"Open exporter")
+        )
+      ),
+      h("div",{className:"pe4-settings-wrap"},
+        h("div",{className:"pe4-settings-grid"},
+          h("section",{className:"pe4-settings-card"},
+            h("h2",null,"Extension"),
+            h("p",null,"Playlist-specific export options are configured from the main Exporter."),
+            h("div",{className:"pe4-settings-row"},h("strong",null,"Version"),h("span",{className:"pe4-settings-value"},"4.2.6")),
+            h("div",{className:"pe4-settings-row"},h("strong",null,"Automatic scheduler"),h("span",{className:"pe4-settings-value"},autoCount?`${autoCount} playlist${autoCount===1?"":"s"} enabled`:"No schedules enabled")),
+            h("div",{className:"pe4-settings-row"},h("strong",null,"Custom folders"),h("span",{className:"pe4-settings-value"},folderPickerSupported?"Supported by this Spotify build":"Unavailable in this Spotify build"))
+          ),
+          h("section",{className:"pe4-settings-card"},
+            h("h2",null,"Local data"),
+            h("p",null,"Settings stay on this Spotify installation. Playlist Exporter does not send configuration or telemetry anywhere."),
+            h("div",{className:"pe4-settings-row"},h("strong",null,"Saved playlist profiles"),h("span",{className:"pe4-settings-value"},String(profileCount))),
+            h("div",{className:"pe4-settings-row"},h("strong",null,"Custom presets"),h("span",{className:"pe4-settings-value"},String(customPresetCount))),
+            h("div",{className:"pe4-settings-row"},h("strong",null,"Successful exports"),h("span",{className:"pe4-settings-value"},String(config.totalExportedFiles || 0)))
+          ),
+          h("section",{className:"pe4-settings-card pe4-settings-wide"},
+            h("h2",null,"Support & feedback"),
+            h("p",null,"Found a bug or have an idea? GitHub Issues keeps reports and suggestions in one place."),
+            h("div",{className:"pe4-actions"},
+              h("a",{className:"pe4-button pe4-button-danger",href:BUG_REPORT_URL,target:"_blank",rel:"noopener noreferrer"},"Report a bug"),
+              h("a",{className:"pe4-button",href:FEATURE_REQUEST_URL,target:"_blank",rel:"noopener noreferrer"},"Suggest a feature"),
+              h("a",{className:"pe4-button",href:PROJECT_URL,target:"_blank",rel:"noopener noreferrer"},"View on GitHub")
             )
           )
         )
@@ -1274,13 +1343,15 @@ const EXTENSION_SHELL_CSS = `
   z-index: 100;
   overflow: auto;
   overscroll-behavior: contain;
-  background: var(--spice-main, #121212);
+  background: color-mix(in srgb, var(--spice-main, #121212) 72%, transparent);
+  backdrop-filter: blur(16px) saturate(115%);
+  -webkit-backdrop-filter: blur(16px) saturate(115%);
   color: var(--spice-text, #fff);
 }
 .pe4-extension-host .pe4-extension-close {
   position: fixed;
-  top: 18px;
-  right: 22px;
+  top: 58px;
+  right: 24px;
   z-index: 2;
   width: 38px;
   height: 38px;
@@ -1328,7 +1399,7 @@ function unmountExtensionUI() {
   document.body.classList.remove("pe4-extension-open");
 }
 
-function ExtensionShell() {
+function ExtensionShell({ mode = "exporter" }) {
   return h(
     "div",
     { className: "pe4-extension-host", role: "dialog", "aria-modal": true, "aria-label": "Playlist Exporter" },
@@ -1344,7 +1415,7 @@ function ExtensionShell() {
       },
       h(Icon, { name: "close", size: 20 })
     ),
-    h(PlaylistExporterErrorBoundary, null, h(PlaylistExporterApp))
+    h(PlaylistExporterErrorBoundary, null, mode === "settings" ? h(PlaylistExporterSettings) : h(PlaylistExporterApp))
   );
 }
 
@@ -1362,13 +1433,17 @@ function mountReact(element, host) {
   throw new Error("This Spotify/Spicetify build does not expose a supported ReactDOM renderer.");
 }
 
-function openPlaylistExporter() {
+function openPlaylistExporter(mode = "exporter") {
   if (extensionHost?.isConnected) {
-    extensionHost.focus?.();
-    return;
+    if (extensionHost.dataset.peMode === mode) {
+      extensionHost.focus?.();
+      return;
+    }
+    unmountExtensionUI();
   }
 
   extensionHost = document.createElement("div");
+  extensionHost.dataset.peMode = mode;
   extensionHost.id = "playlist-exporter-extension-root";
   extensionHost.tabIndex = -1;
   document.body.appendChild(extensionHost);
@@ -1384,7 +1459,7 @@ function openPlaylistExporter() {
   document.addEventListener("keydown", extensionEscapeHandler, true);
 
   try {
-    mountReact(h(ExtensionShell), extensionHost);
+    mountReact(h(ExtensionShell, { mode }), extensionHost);
     extensionHost.focus();
   } catch (error) {
     console.error("[Playlist Exporter] Could not open extension UI:", error);
@@ -1401,10 +1476,21 @@ try {
   window.__playlistExporterV4TopbarButton = new Spicetify.Topbar.Button(
     "Playlist Exporter",
     TOPBAR_ICON,
-    openPlaylistExporter,
+    () => openPlaylistExporter("exporter"),
     false,
     true
   );
+  // Vanilla Spotify can hide the left custom-button slot on some layouts.
+  // Use the documented right-side Topbar slot, while opting the control out
+  // of the Windows/Electron draggable title-bar region.
+  if (window.__playlistExporterV4TopbarButton?.element) {
+    const buttonElement = window.__playlistExporterV4TopbarButton.element;
+    buttonElement.style.pointerEvents = "auto";
+    buttonElement.style.webkitAppRegion = "no-drag";
+    buttonElement.style.position = "relative";
+    buttonElement.style.zIndex = "20";
+    buttonElement.style.cursor = "pointer";
+  }
 } catch (error) {
   console.warn("[Playlist Exporter] Could not register top-bar button:", error);
 }
@@ -1412,9 +1498,9 @@ try {
 if (Spicetify.Menu?.Item) {
   try {
     window.__playlistExporterV4MenuItem = new Spicetify.Menu.Item(
-      "Playlist Exporter",
+      "Playlist Exporter settings",
       false,
-      openPlaylistExporter
+      () => openPlaylistExporter("settings")
     );
     window.__playlistExporterV4MenuItem.register();
   } catch (error) {
@@ -1422,7 +1508,7 @@ if (Spicetify.Menu?.Item) {
   }
 }
 
-console.info("[Playlist Exporter] Extension 4.2.1 loaded.");
+console.info("[Playlist Exporter] Extension 4.2.6 loaded.");
   }
 
   init();
