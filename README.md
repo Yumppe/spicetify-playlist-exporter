@@ -103,9 +103,7 @@ Your extension settings, playlist profiles, presets and folder permissions are s
 
 Bug reports and feature suggestions are very welcome through GitHub Issues.
 
-At the moment, I'm not actively accepting pull requests, mainly so I can keep the project manageable and avoid changes I don't have enough time to review properly.
-
-If you have an improvement in mind, feel free to open a feature request and describe your idea there.
+To keep the project manageable, code contributions are currently limited to collaborators. If you have an improvement in mind, please open a feature request and describe your idea there.
 
 ## Feedback and support
 
