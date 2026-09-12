@@ -3,7 +3,7 @@ name: Bug report
 about: Report a problem with Playlist Exporter
 title: "[Bug]"
 labels: ''
-assignees: Yumppe
+assignees: ''
 
 ---
 
